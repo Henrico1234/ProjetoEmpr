@@ -1,10 +1,7 @@
-// src/components/SaldoCard.tsx
 
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
-import { type Saldos } from '../services/api'; // Importa o tipo
-
-// O componente recebe os saldos como uma "prop"
+import { type Saldos } from '../services/api';
 interface Props {
   saldos: Saldos | null;
   monthYear: string;
@@ -44,7 +41,6 @@ export function SaldoCard({ saldos, monthYear }: Props) {
   );
 }
 
-// Os estilos são locais para o componente
 const styles = StyleSheet.create({
   saldosContainer: {
     backgroundColor: '#ffffff',

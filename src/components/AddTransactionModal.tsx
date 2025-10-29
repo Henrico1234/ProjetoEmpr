@@ -1,5 +1,6 @@
 // src/components/AddTransactionModal.tsx
 
+import { Picker } from '@react-native-picker/picker';
 import React, { useEffect, useState } from 'react';
 import {
   Alert,
@@ -10,31 +11,45 @@ import {
   TextInput,
   View
 } from 'react-native';
-// Caminho relativo corrigido
-import { Picker } from '@react-native-picker/picker';
-import { API_URL } from '../services/api';
+import { API_URL, type Transacao } from '../services/api'; // Importa o tipo Transacao
 
 interface Props {
   visible: boolean;
   monthYear: string;
   categorias: string[];
   onClose: (sucesso: boolean) => void;
+  transactionData?: Transacao | null;
 }
 
-export function AddTransactionModal({ visible, monthYear, categorias, onClose }: Props) {
+export function AddTransactionModal({
+  visible,
+  monthYear,
+  categorias,
+  onClose,
+  transactionData,
+}: Props) {
+
+  const isEditMode = !!transactionData;
+
+
   const [tipo, setTipo] = useState<'Ganho' | 'Despesa'>('Despesa');
   const [descricao, setDescricao] = useState('');
   const [valor, setValor] = useState('');
   const [categoria, setCategoria] = useState(categorias[0] || '');
   const [meioPagamento, setMeioPagamento] = useState('Conta');
   const [isSaving, setIsSaving] = useState(false);
-  
-  useEffect(() => {
-    if (categorias.length > 0 && !categoria) {
-      setCategoria(categorias[0]);
-    }
-  }, [categorias, categoria]); // Corrigido para evitar loops
 
+  useEffect(() => {
+    if (visible && isEditMode && transactionData) {
+      setTipo(transactionData.Tipo);
+      setDescricao(transactionData.Descricao);
+      setValor(transactionData.Valor.toString());
+      setCategoria(transactionData.Categoria);
+      setMeioPagamento(transactionData.MeioPagamento);
+    } else if (!visible) {
+      resetForm();
+    }
+  }, [visible, transactionData, isEditMode]);
 
   const handleSave = async () => {
     const valorFloat = parseFloat(valor.replace(',', '.'));
@@ -46,7 +61,7 @@ export function AddTransactionModal({ visible, monthYear, categorias, onClose }:
     setIsSaving(true);
 
     const payload = {
-      Data: new Date().toISOString().split('T')[0], // Data de hoje YYYY-MM-DD
+      Data: transactionData?.Data || new Date().toISOString().split('T')[0],
       Tipo: tipo,
       Descricao: descricao,
       Categoria: categoria,
@@ -54,24 +69,32 @@ export function AddTransactionModal({ visible, monthYear, categorias, onClose }:
       MeioPagamento: meioPagamento,
     };
 
+    let url = '';
+    let method = '';
+
+    if (isEditMode) {
+      url = `${API_URL}/api/transacoes/${monthYear}/${transactionData?.ID}`;
+      method = 'PUT';
+    } else {
+      url = `${API_URL}/api/transacoes/${monthYear}`;
+      method = 'POST';
+    }
+
     try {
-      const response = await fetch(`${API_URL}/api/transacoes/${monthYear}`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+      const response = await fetch(url, {
+        method: method,
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload),
       });
 
       const data = await response.json();
-
       if (!response.ok || data.erro) {
         throw new Error(data.detail || 'Erro desconhecido do servidor');
       }
 
-      Alert.alert('Sucesso!', 'Transação adicionada.');
+      Alert.alert('Sucesso!', isEditMode ? 'Transação atualizada.' : 'Transação adicionada.');
       resetForm();
-      onClose(true); 
+      onClose(true);
 
     } catch (error: any) {
       Alert.alert('Falha na API', error.message);
@@ -89,8 +112,7 @@ export function AddTransactionModal({ visible, monthYear, categorias, onClose }:
   };
 
   const handleClose = () => {
-    resetForm();
-    onClose(false);
+    onClose(false); 
   };
 
   return (
@@ -101,12 +123,14 @@ export function AddTransactionModal({ visible, monthYear, categorias, onClose }:
       onRequestClose={handleClose}>
       <View style={styles.centeredView}>
         <View style={styles.modalView}>
-          <Text style={styles.modalTitle}>Nova Transação ({monthYear})</Text>
+          <Text style={styles.modalTitle}>
+            {isEditMode ? 'Editar Transação' : 'Nova Transação'}
+          </Text>
 
           <Text style={styles.label}>Tipo:</Text>
           <Picker
             selectedValue={tipo}
-            onValueChange={(itemValue) => setTipo(itemValue as 'Ganho' | 'Despesa')}>
+            onValueChange={(itemValue: string) => setTipo(itemValue as 'Ganho' | 'Despesa')}>
             <Picker.Item label="Despesa" value="Despesa" />
             <Picker.Item label="Ganho" value="Ganho" />
           </Picker>
@@ -131,7 +155,7 @@ export function AddTransactionModal({ visible, monthYear, categorias, onClose }:
           <Text style={styles.label}>Categoria:</Text>
           <Picker
             selectedValue={categoria}
-            onValueChange={(itemValue) => setCategoria(itemValue)}>
+            onValueChange={(itemValue: string) => setCategoria(itemValue)}>
             {categorias.map((cat) => (
               <Picker.Item label={cat} value={cat} key={cat} />
             ))}
@@ -140,7 +164,7 @@ export function AddTransactionModal({ visible, monthYear, categorias, onClose }:
           <Text style={styles.label}>Meio de Pagamento:</Text>
           <Picker
             selectedValue={meioPagamento}
-            onValueChange={(itemValue) => setMeioPagamento(itemValue)}>
+            onValueChange={(itemValue: string) => setMeioPagamento(itemValue)}>
             <Picker.Item label="Conta" value="Conta" />
             <Picker.Item label="Dinheiro em Mãos" value="Dinheiro em Mãos" />
           </Picker>
@@ -155,7 +179,6 @@ export function AddTransactionModal({ visible, monthYear, categorias, onClose }:
   );
 }
 
-// Estilos
 const styles = StyleSheet.create({
   centeredView: {
     flex: 1,

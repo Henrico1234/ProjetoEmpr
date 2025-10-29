@@ -1,6 +1,5 @@
-// app/tabs/index.tsx
-// (Agora com Exclusão)
 
+import { useActionSheet } from '@expo/react-native-action-sheet';
 import { useFocusEffect } from 'expo-router';
 import React, { useState } from 'react';
 import {
@@ -12,9 +11,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-
 import { SafeAreaView } from 'react-native-safe-area-context';
-
 import { AddTransactionModal } from '../../src/components/AddTransactionModal';
 import { MonthYearPicker } from '../../src/components/MonthYearPicker';
 import { SaldoCard } from '../../src/components/SaldoCard';
@@ -30,14 +27,19 @@ function getMesAnoAtual(): string {
 }
 
 export default function GerenciamentoMensalScreen() {
-  
   const [monthYear, setMonthYear] = useState(getMesAnoAtual());
   const { isLoading, saldos, transacoes, erro, refreshData } = useMonthlyData(monthYear);
   const [modalVisible, setModalVisible] = useState(false);
   const [listaCategorias, setListaCategorias] = useState<string[]>([]);
+  
+  const [selectedItem, setSelectedItem] = useState<Transacao | null>(null);
+
+
+  const { showActionSheetWithOptions } = useActionSheet();
 
   useFocusEffect(
     React.useCallback(() => {
+
       const fetchCategorias = async () => {
         try {
           const response = await fetch(`${API_URL}/api/categorias`);
@@ -51,58 +53,82 @@ export default function GerenciamentoMensalScreen() {
     }, [])
   );
 
-  const handleOpenModal = () => setModalVisible(true);
+  const handleOpenAddModal = () => {
+    setSelectedItem(null);
+    setModalVisible(true);
+  };
   
+  const handleOpenEditModal = (item: Transacao) => {
+    setSelectedItem(item);
+    setModalVisible(true);
+  };
+
   const handleCloseModal = (sucesso: boolean) => {
     setModalVisible(false);
+    setSelectedItem(null);
     if (sucesso) {
       refreshData();
     }
   };
 
-  // --- 2. NOVA LÓGICA DE EXCLUSÃO ---
   const handleItemPress = (item: Transacao) => {
-    // Mostra um pop-up de confirmação nativo
+    const options = ['Editar', 'Excluir', 'Cancelar'];
+    const destructiveButtonIndex = 1;
+    const cancelButtonIndex = 2;
+
+    showActionSheetWithOptions(
+      {
+        options,
+        cancelButtonIndex,
+        destructiveButtonIndex,
+        title: item.Descricao,
+        message: `R$ ${item.Valor.toFixed(2)} - ${item.Categoria}`
+      },
+      (selectedIndex?: number) => {
+        switch (selectedIndex) {
+          case 0: // Editar
+            handleOpenEditModal(item);
+            break;
+          case 1:
+            confirmDelete(item);
+            break;
+          case 2:
+            break;
+        }
+      }
+    );
+  };
+
+  const confirmDelete = (item: Transacao) => {
     Alert.alert(
-      "Excluir Transação", // Título
-      `Tem a certeza que deseja excluir "${item.Descricao}"?`, // Mensagem
+      "Excluir Transação",
+      `Tem a certeza que deseja excluir "${item.Descricao}"?`,
       [
-        // Botão 1: Cancelar
-        {
-          text: "Cancelar",
-          style: "cancel" // Estilo iOS para "cancelar"
-        },
-        // Botão 2: Excluir (Ação Destrutiva)
+        { text: "Cancelar", style: "cancel" },
         {
           text: "Excluir",
-          style: "destructive", // Estilo iOS para "destrutivo" (vermelho)
-          onPress: () => deleteTransaction(item.ID.toString()) // Chama a nossa função de API
+          style: "destructive",
+          onPress: () => deleteTransaction(item.ID.toString())
         }
       ]
     );
   };
 
-  // 3. Função que chama a API DELETE
   const deleteTransaction = async (transaction_id: string) => {
     try {
       const response = await fetch(`${API_URL}/api/transacoes/${monthYear}/${transaction_id}`, {
         method: 'DELETE',
       });
-
       const data = await response.json();
-
       if (!response.ok || data.erro) {
         throw new Error(data.detail || 'Erro ao excluir');
       }
-
       Alert.alert("Sucesso", "Transação excluída!");
-      refreshData(); // Recarrega os dados!
-
+      refreshData();
     } catch (error: any) {
       Alert.alert("Falha", error.message);
     }
   };
-  // --- FIM DA NOVA LÓGICA ---
 
 
   if (isLoading && !saldos) { 
@@ -113,7 +139,7 @@ export default function GerenciamentoMensalScreen() {
       </View>
     );
   }
-  // (O resto do ecrã de Erro e Loading continua igual...)
+
   if (erro) {
     return (
       <View style={styles.containerCentro}>
@@ -136,11 +162,10 @@ export default function GerenciamentoMensalScreen() {
       <Text style={styles.tituloLista}>Lançamentos do Mês</Text>
       <FlatList
         data={transacoes}
-        // 4. Passa a função de "press" para o componente
         renderItem={({ item }) => (
           <TransacaoItem 
             item={item} 
-            onPress={() => handleItemPress(item)} // Passa a função de clique
+            onPress={() => handleItemPress(item)} 
           />
         )}
         keyExtractor={(item: Transacao) => item.ID.toString()}
@@ -152,10 +177,9 @@ export default function GerenciamentoMensalScreen() {
         style={styles.lista}
       />
 
-      {/* (O Botão Flutuante e o Modal continuam iguais) */}
       <TouchableOpacity
         style={styles.floatingButton}
-        onPress={handleOpenModal}>
+        onPress={handleOpenAddModal}>
         <Text style={styles.floatingButtonText}>+</Text>
       </TouchableOpacity>
       
@@ -164,12 +188,12 @@ export default function GerenciamentoMensalScreen() {
         onClose={handleCloseModal}
         monthYear={monthYear}
         categorias={listaCategorias}
+        transactionData={selectedItem} 
       />
     </SafeAreaView>
   );
 }
 
-// (Os Estilos 'styles' permanecem exatamente os mesmos)
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,

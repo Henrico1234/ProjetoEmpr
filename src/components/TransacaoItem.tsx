@@ -1,20 +1,14 @@
-// src/components/TransacaoItem.tsx
-
 import React from 'react';
-// 1. Importa o TouchableOpacity
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { type Transacao } from '../services/api'; // Caminho relativo
+import { type Transacao } from '../services/api';
 
-// 2. Define a nova prop
 interface Props {
   item: Transacao;
-  onPress: () => void; // O item agora espera uma função "onPress"
+  onPress: () => void;
 }
 
 export function TransacaoItem({ item, onPress }: Props) {
   const corValor = item.Tipo.toLowerCase() === 'ganho' ? styles.valorGanho : styles.valorDespesa;
-  
-  // 3. Envolve o View principal com o TouchableOpacity
   return (
     <TouchableOpacity onPress={onPress} style={styles.touchable}>
       <View style={styles.itemLista}>
@@ -31,10 +25,9 @@ export function TransacaoItem({ item, onPress }: Props) {
 }
 
 const styles = StyleSheet.create({
-  // 4. Adiciona o estilo para o touchable
   touchable: {
     marginBottom: 10,
-    marginHorizontal: 15, // Alinha com o card
+    marginHorizontal: 15,
   },
   itemLista: {
     backgroundColor: '#ffffff',
