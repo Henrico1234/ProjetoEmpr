@@ -39,3 +39,44 @@ export interface NovaDivida {
   recurrence_months: number;
   category: string;
 }
+export interface Orcamento {
+  MesAno: string;
+  category: string;
+  limit: number;
+}
+
+export interface NovoOrcamento {
+  category: string;
+  limit: number;
+}
+
+export interface OrcamentoExcedido {
+  Categoria: string;
+  Limite: number;
+  GastoAtual: number;
+  Excedente: number;
+}
+
+export interface Emprestimo {
+  ID: string;
+  Tipo: 'Concedido' | 'Recebido';
+  ParteEnvolvida: string;
+  ValorOriginal: number;
+  'Juros%': number;
+  NumParcelas: number;
+  ParcelasPagas: number;
+  Status: string;
+}
+
+export interface NovoEmprestimo {
+  loan_type: string;
+  involved_party: string;
+  original_value: number;
+  interest_rate: number;
+  num_installments: number;
+}
+
+export interface PagamentoEmprestimo {
+  month_year: string;
+  amount_paid: number;
+}

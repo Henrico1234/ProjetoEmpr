@@ -15,7 +15,7 @@ import {
   View,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useCategories } from '../../src/hooks/useCategories';
+import { useCategories } from '../src/hooks/useCategories';
 
 
 export default function CategoriasScreen() {
