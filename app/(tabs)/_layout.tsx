@@ -1,3 +1,4 @@
+
 import { Tabs } from 'expo-router';
 import React from 'react';
 
@@ -23,6 +24,22 @@ export default function TabLayout() {
           tabBarIcon: ({ color }) => <IconSymbol size={28} name="house.fill" color={color} />,
         }}
       />
+
+      <Tabs.Screen
+        name="dividas"
+        options={{
+          title: 'Dívidas',
+          tabBarIcon: ({ color }) => <IconSymbol size={28} name="creditcard.fill" color={color} />,
+        }}
+      />
+      <Tabs.Screen
+        name="categorias"
+        options={{
+          title: 'Categorias',
+          tabBarIcon: ({ color }) => <IconSymbol size={28} name="list.bullet" color={color} />, 
+        }}
+      />
+
       <Tabs.Screen
         name="explore"
         options={{

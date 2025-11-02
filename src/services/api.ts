@@ -1,9 +1,6 @@
-// src/services/api.ts
 
-// 1. Define o IP da API num único local
-export const API_URL = 'http://192.168.1.104:8000';
+export const API_URL = 'http://192.168.1.100:8000';
 
-// 2. Define os "Tipos" de dados que esperamos
 export interface Transacao {
   ID: string | number;
   Data: string;
@@ -20,4 +17,25 @@ export interface Saldos {
   ganhos_mes: number;
   despesas_mes: number;
   saldo_liquido: number;
+}
+
+export interface Divida {
+  ID: string;
+  Descricao: string;
+  Valor: number;
+  DataVencimento: string;
+  Status: 'Pendente' | 'Paga';
+  Recorrencia: string;
+  RecorrenciaMeses: number;
+  Categoria: string;
+}
+
+export interface NovaDivida {
+  description: string;
+  value: number;
+  due_date: string;
+  status: string;
+  recurrence: string;
+  recurrence_months: number;
+  category: string;
 }
