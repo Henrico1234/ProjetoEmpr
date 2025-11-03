@@ -1,15 +1,13 @@
-// src/components/AddBudgetModal.tsx
-
 import { Picker } from '@react-native-picker/picker';
 import React, { useEffect, useState } from 'react';
 import {
-    Alert,
-    Button,
-    Modal,
-    StyleSheet,
-    Text,
-    TextInput,
-    View
+  Alert,
+  Button,
+  Modal,
+  StyleSheet,
+  Text,
+  TextInput,
+  View
 } from 'react-native';
 import { type NovoOrcamento } from '../services/api';
 

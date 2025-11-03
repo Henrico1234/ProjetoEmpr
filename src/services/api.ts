@@ -80,3 +80,11 @@ export interface PagamentoEmprestimo {
   month_year: string;
   amount_paid: number;
 }
+
+export interface SummaryResponse {
+  Ganhos_Totais: number;
+  Despesas_Totais: number;
+  Saldo_Total: number;
+  Despesas_por_Categoria: { [key: string]: number };
+  Ganhos_por_Categoria: { [key: string]: number };
+}

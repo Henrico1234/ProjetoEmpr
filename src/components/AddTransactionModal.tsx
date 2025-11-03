@@ -1,5 +1,3 @@
-// src/components/AddTransactionModal.tsx
-
 import { Picker } from '@react-native-picker/picker';
 import React, { useEffect, useState } from 'react';
 import {
@@ -11,7 +9,7 @@ import {
   TextInput,
   View
 } from 'react-native';
-import { API_URL, type Transacao } from '../services/api'; // Importa o tipo Transacao
+import { API_URL, type Transacao } from '../services/api';
 
 interface Props {
   visible: boolean;

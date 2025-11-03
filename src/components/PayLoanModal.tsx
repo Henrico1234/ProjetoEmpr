@@ -1,14 +1,12 @@
-// src/components/PayLoanModal.tsx
-
 import React, { useState } from 'react';
 import {
-    Alert,
-    Button,
-    Modal,
-    StyleSheet,
-    Text,
-    TextInput,
-    View
+  Alert,
+  Button,
+  Modal,
+  StyleSheet,
+  Text,
+  TextInput,
+  View
 } from 'react-native';
 import { type Emprestimo, type PagamentoEmprestimo } from '../services/api';
 

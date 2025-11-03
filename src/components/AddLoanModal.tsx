@@ -1,16 +1,14 @@
-// src/components/AddLoanModal.tsx
-
 import { Picker } from '@react-native-picker/picker';
 import React, { useState } from 'react';
 import {
-    Alert,
-    Button,
-    Modal,
-    ScrollView,
-    StyleSheet,
-    Text,
-    TextInput,
-    View,
+  Alert,
+  Button,
+  Modal,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TextInput,
+  View,
 } from 'react-native';
 import { type NovoEmprestimo } from '../services/api';
 

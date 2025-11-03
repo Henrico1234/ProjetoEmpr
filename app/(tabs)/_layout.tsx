@@ -1,5 +1,3 @@
-// front/app/(tabs)/_layout.tsx
-
 import { DrawerActions } from '@react-navigation/native';
 import { Tabs, useNavigation } from 'expo-router';
 import React from 'react';

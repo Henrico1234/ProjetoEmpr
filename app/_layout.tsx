@@ -1,5 +1,3 @@
-// front/app/_layout.tsx
-
 import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
 import { StatusBar } from 'expo-status-bar';
 import { useColorScheme } from 'react-native';
@@ -41,6 +39,15 @@ export default function RootLayout() {
               }}
             />
             <Drawer.Screen
+              name="relatorios"
+              options={{
+                title: 'Relatórios',
+                drawerIcon: ({ color, size }) => (
+                  <IconSymbol name="doc.text.fill" size={size} color={color} />
+                ),
+              }}
+            />
+            <Drawer.Screen
               name="emprestimos"
               options={{
                 title: 'Empréstimos',
@@ -55,15 +62,6 @@ export default function RootLayout() {
                 title: 'Categorias',
                 drawerIcon: ({ color, size }) => (
                   <IconSymbol name="list.bullet" size={size} color={color} />
-                ),
-              }}
-            />
-            <Drawer.Screen
-              name="explore"
-              options={{
-                title: 'Explore',
-                drawerIcon: ({ color, size }) => (
-                  <IconSymbol name="paperplane.fill" size={size} color={color} />
                 ),
               }}
             />

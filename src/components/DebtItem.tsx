@@ -1,5 +1,3 @@
-// src/components/DebtItem.tsx
-
 import React from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { type Divida } from '../services/api';

@@ -1,5 +1,3 @@
-// src/hooks/useLoans.ts
-
 import { useCallback, useEffect, useState } from 'react';
 import { API_URL, type Emprestimo, type NovoEmprestimo, type PagamentoEmprestimo } from '../services/api';
 
