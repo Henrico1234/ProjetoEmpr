@@ -16,13 +16,7 @@ import { LoanItem } from '../src/components/LoanItem';
 import { PayLoanModal } from '../src/components/PayLoanModal';
 import { useLoans } from '../src/hooks/useLoans';
 import { type Emprestimo } from '../src/services/api';
-
-function getMesAnoAtual(): string {
-  const date = new Date('2025-10-26T12:00:00'); 
-  const month = (date.getMonth() + 1).toString().padStart(2, '0');
-  const year = date.getFullYear().toString();
-  return `${month}-${year}`;
-}
+import { getMesAnoAtual } from '../src/utils/date';
 
 export default function EmprestimosScreen() {
   const { 
@@ -38,6 +32,8 @@ export default function EmprestimosScreen() {
   const [addModalVisible, setAddModalVisible] = useState(false);
   const [payModalVisible, setPayModalVisible] = useState(false);
   const [selectedLoan, setSelectedLoan] = useState<Emprestimo | null>(null);
+  
+  const currentMonthYear = getMesAnoAtual();
   
   const { showActionSheetWithOptions } = useActionSheet();
 
@@ -164,7 +160,7 @@ export default function EmprestimosScreen() {
         onClose={handleClosePayModal}
         onSubmit={payInstallment}
         loan={selectedLoan}
-        currentMonthYear={getMesAnoAtual()}
+        currentMonthYear={currentMonthYear}
       />
     </SafeAreaView>
   );

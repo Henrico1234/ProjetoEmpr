@@ -1,4 +1,3 @@
-
 import { useActionSheet } from '@expo/react-native-action-sheet';
 import { useFocusEffect } from 'expo-router';
 import React, { useState } from 'react';
@@ -12,19 +11,13 @@ import {
   View,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+
 import { AddDebtModal } from '../../src/components/AddDebtModal';
 import { DebtItem } from '../../src/components/DebtItem';
 import { MonthYearPicker } from '../../src/components/MonthYearPicker';
 import { useDebts } from '../../src/hooks/useDebts';
 import { API_URL, type Divida } from '../../src/services/api';
-
-
-function getMesAnoAtual(): string {
-  const date = new Date('2025-10-26T12:00:00'); 
-  const month = (date.getMonth() + 1).toString().padStart(2, '0');
-  const year = date.getFullYear().toString();
-  return `${month}-${year}`;
-}
+import { getMesAnoAtual } from '../../src/utils/date';
 
 export default function DividasScreen() {
   const [monthYear, setMonthYear] = useState(getMesAnoAtual());
@@ -94,7 +87,7 @@ export default function DividasScreen() {
       }
     );
   };
-
+  
   const confirmPay = (item: Divida) => {
     Alert.alert(
       "Pagar Dívida",
@@ -116,7 +109,7 @@ export default function DividasScreen() {
       ]
     );
   };
-
+  
   const confirmDelete = (item: Divida) => {
     Alert.alert(
       "Excluir Dívida",
@@ -138,7 +131,7 @@ export default function DividasScreen() {
       ]
     );
   };
-
+  
   const handleOpenAddModal = () => {
     setModalVisible(true);
   };
@@ -147,7 +140,6 @@ export default function DividasScreen() {
     setModalVisible(false);
   };
   
-
   if (isLoading && !dividas.length) { 
     return (
       <View style={styles.containerCentro}>

@@ -17,13 +17,7 @@ import { SaldoCard } from '../../src/components/SaldoCard';
 import { TransacaoItem } from '../../src/components/TransacaoItem';
 import { useMonthlyData } from '../../src/hooks/useMonthlyData';
 import { API_URL, type Transacao } from '../../src/services/api';
-
-function getMesAnoAtual(): string {
-  const date = new Date('2025-10-26T12:00:00'); 
-  const month = (date.getMonth() + 1).toString().padStart(2, '0');
-  const year = date.getFullYear().toString();
-  return `${month}-${year}`;
-}
+import { getMesAnoAtual } from '../../src/utils/date';
 
 export default function GerenciamentoMensalScreen() {
   const [monthYear, setMonthYear] = useState(getMesAnoAtual());
@@ -32,7 +26,6 @@ export default function GerenciamentoMensalScreen() {
   const [listaCategorias, setListaCategorias] = useState<string[]>([]);
   
   const [selectedItem, setSelectedItem] = useState<Transacao | null>(null);
-
 
   const { showActionSheetWithOptions } = useActionSheet();
 
@@ -130,7 +123,6 @@ export default function GerenciamentoMensalScreen() {
       Alert.alert("Falha", error.message);
     }
   };
-
 
   if (isLoading && !saldos) { 
     return (

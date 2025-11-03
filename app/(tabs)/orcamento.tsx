@@ -16,13 +16,7 @@ import { BudgetItem } from '../../src/components/BudgetItem';
 import { MonthYearPicker } from '../../src/components/MonthYearPicker';
 import { useBudget } from '../../src/hooks/useBudget';
 import { API_URL, type Orcamento, type OrcamentoExcedido } from '../../src/services/api';
-
-function getMesAnoAtual(): string {
-  const date = new Date('2025-10-26T12:00:00'); 
-  const month = (date.getMonth() + 1).toString().padStart(2, '0');
-  const year = date.getFullYear().toString();
-  return `${month}-${year}`;
-}
+import { getMesAnoAtual } from '../../src/utils/date';
 
 type BudgetItemType = Orcamento | OrcamentoExcedido;
 
