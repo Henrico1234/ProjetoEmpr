@@ -1,4 +1,3 @@
-
 import { useActionSheet } from '@expo/react-native-action-sheet';
 import { useFocusEffect } from 'expo-router';
 import React, { useState } from 'react';
@@ -39,6 +38,8 @@ export default function GerenciamentoMensalScreen() {
 
   useFocusEffect(
     React.useCallback(() => {
+      
+      refreshData();
 
       const fetchCategorias = async () => {
         try {
@@ -50,7 +51,7 @@ export default function GerenciamentoMensalScreen() {
         } catch (e) { console.error("Falha ao buscar categorias", e); }
       };
       fetchCategorias();
-    }, [])
+    }, [refreshData])
   );
 
   const handleOpenAddModal = () => {
@@ -86,7 +87,7 @@ export default function GerenciamentoMensalScreen() {
       },
       (selectedIndex?: number) => {
         switch (selectedIndex) {
-          case 0: // Editar
+          case 0:
             handleOpenEditModal(item);
             break;
           case 1:
