@@ -1,4 +1,9 @@
+<<<<<<< HEAD
 export const API_URL = 'http://10.73.55.45:8000';
+=======
+
+export const API_URL = 'http://192.168.1.100:8000';
+>>>>>>> c4b61244c7ce19a54d290dc0128c37525eb13cfe
 
 export interface Transacao {
   ID: string | number;

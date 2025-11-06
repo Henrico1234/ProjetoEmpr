@@ -1,15 +1,23 @@
+<<<<<<< HEAD
 import { Ionicons } from '@expo/vector-icons';
 import React from 'react';
 import { StyleSheet, Text, View, useColorScheme } from 'react-native';
 import { Colors } from '../../constants/theme';
 import { type Saldos } from '../services/api';
 
+=======
+
+import React from 'react';
+import { StyleSheet, Text, View } from 'react-native';
+import { type Saldos } from '../services/api';
+>>>>>>> c4b61244c7ce19a54d290dc0128c37525eb13cfe
 interface Props {
   saldos: Saldos | null;
   monthYear: string;
 }
 
 export function SaldoCard({ saldos, monthYear }: Props) {
+<<<<<<< HEAD
   const theme = useColorScheme() ?? 'light';
   const colors = Colors[theme];
 
@@ -60,12 +68,43 @@ export function SaldoCard({ saldos, monthYear }: Props) {
         <Text style={styles.footerText}>Conta: {formatCurrency(saldos?.saldo_conta)}</Text>
         <Text style={styles.footerText}> | </Text>
         <Text style={styles.footerText}>Mãos: {formatCurrency(saldos?.saldo_maos)}</Text>
+=======
+  return (
+    <View style={styles.saldosContainer}>
+      <Text style={styles.saldosTitulo}>Saldos (Mês: {monthYear})</Text>
+      
+      <View style={styles.saldosLinha}>
+        <Text style={styles.saldosLabel}>Saldo em Conta:</Text>
+        <Text style={styles.saldosValor}>R$ {saldos?.saldo_conta.toFixed(2)}</Text>
+      </View>
+      <View style={styles.saldosLinha}>
+        <Text style={styles.saldosLabel}>Saldo em Mãos:</Text>
+        <Text style={styles.saldosValor}>R$ {saldos?.saldo_maos.toFixed(2)}</Text>
+      </View>
+      <View style={styles.saldosLinha}>
+        <Text style={styles.saldosLabel}>Ganhos:</Text>
+        <Text style={[styles.saldosValor, styles.valorGanho]}>R$ {saldos?.ganhos_mes.toFixed(2)}</Text>
+      </View>
+      <View style={styles.saldosLinha}>
+        <Text style={styles.saldosLabel}>Despesas:</Text>
+        <Text style={[styles.saldosValor, styles.valorDespesa]}>R$ {saldos?.despesas_mes.toFixed(2)}</Text>
+      </View>
+      
+      <View style={styles.saldosSeparador} />
+      
+      <View style={styles.saldosLinha}>
+        <Text style={styles.saldosLabelTotal}>Saldo Líquido:</Text>
+        <Text style={[styles.saldosValorTotal, saldos?.saldo_liquido ?? 0 >= 0 ? styles.valorGanho : styles.valorDespesa]}>
+          R$ {saldos?.saldo_liquido.toFixed(2)}
+        </Text>
+>>>>>>> c4b61244c7ce19a54d290dc0128c37525eb13cfe
       </View>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
+<<<<<<< HEAD
   container: {
     borderRadius: 24,
     margin: 16,
@@ -141,4 +180,57 @@ const styles = StyleSheet.create({
     fontSize: 13,
     fontWeight: '500',
   }
+=======
+  saldosContainer: {
+    backgroundColor: '#ffffff',
+    padding: 20,
+    margin: 15,
+    borderRadius: 10,
+    elevation: 3,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+  },
+  saldosTitulo: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: '#333',
+    marginBottom: 15,
+  },
+  saldosLinha: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: 8,
+  },
+  saldosLabel: {
+    fontSize: 16,
+    color: '#555',
+  },
+  saldosValor: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: '#333',
+  },
+  saldosSeparador: {
+    height: 1,
+    backgroundColor: '#eee',
+    marginVertical: 10,
+  },
+  saldosLabelTotal: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: '#000',
+  },
+  saldosValorTotal: {
+    fontSize: 18,
+    fontWeight: 'bold',
+  },
+  valorGanho: {
+    color: '#28a745',
+  },
+  valorDespesa: {
+    color: '#dc3545',
+  },
+>>>>>>> c4b61244c7ce19a54d290dc0128c37525eb13cfe
 });
